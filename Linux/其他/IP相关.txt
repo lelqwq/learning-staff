@@ -1,0 +1,19 @@
+Debian 12:
+
+执行ip addr查看网卡名称
+编辑网卡配置文件/etc/network/interfaces，在最后添加以下内容
+auto ens33
+iface ens33 inet static
+address 192.168.2.157
+netmask 255.255.255.0
+gateway 192.168.2.2
+保存退出后，执行如下命令重启网络服务：
+nmcli connection down "Wired connection 1"  (Wired connection 1是网络连接名称)
+nmcli connection up "Wired connection 1"
+
+
+
+桥接模式下手动设置IP后，执行
+nmcli connection down "Wired connection 1"  (Wired connection 1是网络连接名称)
+nmcli connection up "Wired connection 1"
+关闭重启网络，使手动设置的IP生效

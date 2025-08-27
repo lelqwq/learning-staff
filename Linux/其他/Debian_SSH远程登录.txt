@@ -1,0 +1,31 @@
+查看ssh服务状态
+systemctl status ssh
+如果显示ssh信息，则查看下一段教程
+如果没有找到ssh服务，则需下载ssh服务
+更新apt: apt update
+下载ssh服务: apt install openssh-server
+再次检查其状态: systemctl status ssh
+
+
+执行vim /etc/ssh/sshd_config打开配置文件
+确保以下行存在且正确配置，保存退出
+	Port 22
+	ListenAddress 0.0.0.0
+执行ssh IP或域名  例：ssh debian2
+输入debian2的root密码后就可以远程登录
+
+
+遇到 Permission denied, please try again 的错误信息
+检查/etc/ssh/sshd_config文件，确保没有禁止root用户登录的设置
+打开文件vim /etc/ssh/sshd_config
+查找以下行
+PermitRootLogin yes
+如果看到 PermitRootLogin no 或者 PermitRootLogin prohibit-password，需将其更改为 yes 或 without-password允许密钥认证
+修改配置后，重启 SSH 服务以应用更改
+sudo systemctl restart ssh
+
+
+ssh免密登录
+若想在debian1上免密登录debian2
+在debian1上执行ssh-keygen -t rsa -b 4096: 生成SSH公钥密钥对。实际上是一对锁和钥匙
+然后再执行ssh-copy-id debian2: 将本地SSH公钥复制到debian2。实际上是把锁加到debian2上，可以用钥匙进行访问

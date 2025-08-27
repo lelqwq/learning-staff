@@ -1,0 +1,41 @@
+创建Class时，编译器默认提供三个函数：
+	1.无参构造函数
+	2.拷贝构造函数(默认浅拷贝)
+	3.析构函数
+如果自己写 有参或拷贝构造函数，那么编译器不再提供无参构造函数
+
+若A_Class包含B_Class，如下：
+Class A_Class
+{
+Public:
+	B_Class b;
+};
+当创建A_Class的实例时，先执行B_Class的构造函数，再执行A_Class的构造函数
+当销毁A_Class的实例时，先执行A_Class的析构函数，再执行B_Class的析构函数
+
+
+
+this 在非静态成员函数内部使用时，指向调用该成员函数的对象本身
+
+
+
+模板 template
+语法：
+template <typename T> //固定前缀
+返回类型 函数名(参数列表) 
+{
+    // 使用 T 类型编写泛型逻辑
+}
+
+示例：交换两个变量的函数模板
+template <typename T>
+void swapValues(T& a, T& b) 
+{
+    T temp = a;
+    a = b;
+    b = temp;
+}
+
+
+
+函数参数的引用是 C++ 引入的特性；原始的 C 语言不支持引用语法，只能使用指针

@@ -1,0 +1,32 @@
+C++ STL (Standard Template Library)中sort()用快速排序实现，包含于以下头文件
+#include <algorithm>
+
+========================================================
+
+
+int partition(int arr[], int low, int high)
+{
+    int pivot = arr[low];
+    while (low < high)
+    {
+        while (low < high && arr[high] >= pivot)  high--; //找到比pivot小的数
+		arr[low] = arr[high];
+		while (low < high && arr[low] <= pivot)  low++; //找到比pivot大的数
+		arr[high] = arr[low];
+    }
+    arr[low] = pivot;
+    return low;
+}
+
+
+=======================================================
+
+void quickSort(int arr[], int low, int high)  //low,high分别表示,排序的起始下标与结束下标
+{
+    if (low < high)
+    {
+        int pivotLocation = partition(arr, low, high);
+        quickSort(arr, low, pivotLocation - 1);
+        quickSort(arr, pivotLocation + 1, high);
+    }
+}

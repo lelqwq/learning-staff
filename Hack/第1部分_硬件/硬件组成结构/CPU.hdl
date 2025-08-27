@@ -1,0 +1,74 @@
+CHIP CPU 
+{
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+	
+    Mux16(a= instruction, b= ALUoutput , sel=instruction[15] , out= beforeA);
+    And(a= instruction[15], b= instruction[5], out= ins15Andins5);
+    Not(in= instruction[15], out= notins15);
+    Or(a= ins15Andins5, b= notins15, out= loadA);
+    //A Register
+    ARegister(in= beforeA, load= loadA, out= afterA);
+    And(a= instruction[15], b= instruction[4], out= loadD);
+    //D Register
+    DRegister(in= ALUoutput, load= loadD, out= afterD);
+    Mux16(a=afterA , b= inM, sel=instruction[12] , out= AorM);
+    ALU(x= afterD, y= AorM, zx= instruction[11], nx= instruction[10], zy= instruction[9], ny= instruction[8], f= instruction[7], no= instruction[6], out= ALUoutput, zr= zr, ng= ng);
+    And16(a= ALUoutput, b= true, out= outM);
+    And(a= instruction[3], b= instruction[15], out= writeM);
+    And16(a= afterA, b=true , out[0..14]= addressM);
+
+
+    Not(in= instruction[2], out= Notj1);
+    Not(in= instruction[1], out= Notj2);
+    Not(in= instruction[0], out= Notj3);
+    Not(in= zr, out= Notzr);
+    Not(in= ng, out= Notng);
+
+    And(a= Notj1, b= Notj2, out= Notj1AndNotj2);
+    And(a= Notj1AndNotj2, b= instruction[0], out= Notj1AndNotj2Andj3);
+    And(a= Notzr, b= Notng, out= NotzrAndNotng);
+    And(a= Notj1AndNotj2Andj3, b= NotzrAndNotng, out= O1);
+
+    And(a= Notj1, b= instruction[1], out= Notj1Andj2);
+    And(a= Notj1Andj2, b= Notj3, out= Notj1Andj2AndNotj3);
+    And(a= Notj1Andj2AndNotj3, b= zr, out= O2);
+
+    And(a= Notj1Andj2, b= instruction[0], out= Notj1Andj2Andj3);
+    And(a= Notj1Andj2Andj3, b= Notng, out= O3);
+
+    And(a= instruction[2], b= Notj2, out= j1AndNotj2);
+    And(a= j1AndNotj2, b= Notj3, out= j1AndNotj2AndNotj3);
+    And(a= j1AndNotj2AndNotj3, b= ng, out= O4);
+
+    And(a= j1AndNotj2, b= instruction[0], out= j1AndNotj2Andj3);
+    And(a= j1AndNotj2Andj3, b= Notzr, out= O5);
+
+    And(a= instruction[2], b= instruction[1], out= j1Andj2);
+    And(a= j1Andj2, b= Notj3, out= j1Andj2AndNotj3);
+    Xor(a = zr, b = ng, out = zrXorng);
+    And(a= j1Andj2AndNotj3, b= zrXorng, out= O6);
+
+    And(a= j1Andj2, b= instruction[0], out= O7);
+
+    Or(a= O1, b= O2, out= O12);
+    Or(a= O12, b= O3, out= O123);
+    Or(a= O123, b= O4, out= O1234);
+    Or(a= O1234, b= O5, out= O12345);
+    Or(a= O12345, b= O6, out= O123456);
+    Or(a= O123456, b= O7, out= O1234567);
+    And(a= O1234567, b= instruction[15], out= PCload);
+
+    Not(in= PCload, out= PCinc);
+    PC(in= afterA, load= PCload, inc= PCinc, reset=reset , out[0..14]=pc );
+}

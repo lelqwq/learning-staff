@@ -1,0 +1,8 @@
+永久修改（修改配置文件）
+
+Vim 的全局配置文件位于 /etc/vim/vimrc (Debian 12)
+打开/etc/vim/vimrc文件，添加以下内容：
+	set tabstop=4       设置 Tab 的显示宽度为 4 个空格
+	set shiftwidth=4    设置缩进的宽度为 4 个空格
+	set expandtab       将 Tab 转换为空格
+保存退出

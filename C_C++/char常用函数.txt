@@ -1,0 +1,58 @@
+#include <string.h>
+
+1. strcpy : 复制字符串
+   char *strcpy(char *A, const char *B);
+   将B字符串复制到A中。
+
+2. strncpy : 复制指定长度的字符串
+   char *strncpy(char *dest, const char *src, size_t n);
+   将`src`字符串的前`n`个字符复制到`dest`中。
+
+3. strcat : 连接字符串
+   char *strcat(char *dest, const char *src);
+   将`src`字符串追加到`dest`字符串的末尾。
+
+4. strncat : 连接指定长度的字符串
+   char *strncat(char *dest, const char *src, size_t n);
+   将`src`字符串的前`n`个字符追加到`dest`字符串的末尾。
+
+5. strcmp : 比较字符串
+   int strcmp(const char *str1, const char *str2);
+   比较`str1`和`str2`字符串，返回值为0表示相等，负值表示`str1`小于`str2`，正值表示`str1`大于`str2`。
+
+6. strncmp : 比较指定长度的字符串
+   int strncmp(const char *str1, const char *str2, size_t n);
+   比较`str1`和`str2`字符串的前`n`个字符。
+
+7. strchr : 查找字符
+   char *strchr(const char *str, int c);
+   在字符串`str`中查找字符`c`的首次出现。
+   返回值：
+		返回指向字符串 s 中第一次出现字符 c 的位置的指针。
+		如果未找到该字符，则返回 NULL。
+		特别地，如果 c 是 \0（空字符），strchr 会返回指向字符串末尾空字符的指针
+
+
+8. strrchr : 查找字符（从后向前）
+   char *strrchr(const char *str, int c);
+   在字符串`str`中从后向前查找字符`c`的首次出现。
+
+9. strlen : 计算字符串长度
+   size_t strlen(const char *str);
+   返回字符串`str`的长度（不包括终止符`'\0'`）。
+
+10. strstr : 查找子字符串
+    char *strstr(const char *haystack, const char *needle);
+    在字符串`haystack`中查找子字符串`needle`的首次出现，返回首次出现的指针。
+
+11. strtok : 分割字符串
+    char *strtok(char *str, const char *delim);
+    将字符串`str`分割成一系列标记（tokens），每次调用返回一个标记。
+
+12. memcpy : 复制内存块
+    void *memcpy(void *dest, const void *src, size_t n);
+    将`src`指向的内存块的前`n`个字节复制到`dest`指向的内存块。
+
+13. memset : 设置内存块
+    void *memset(void *str, int c, size_t n);
+    将`str`指向的内存块的前`n`个字节设置为字符`c`。
