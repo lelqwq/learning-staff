@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <string.h>
+#include <malloc.h>
+
+static char** seperate_string(char* str, const char* delim)
+{
+	char* token;//截取的子串
+	char* context = nullptr;//strtok_s()保存的信息
+	char** tokens = (char**)malloc(sizeof(char*) * 20);//子串的数组
+	if (tokens == NULL)
+	{
+		perror("seperate_string malloc failed");
+		return NULL;
+	}
+	memset(tokens, NULL, sizeof(char*) * 20);
+	token = strtok_s(str, delim, &context);// 获取第一个子串
+	for (int i = 0; token != NULL; ++i)// 获取剩余子串
+	{
+		tokens[i] = token;
+		token = strtok_s(NULL, delim, &context);
+	}
+	return tokens;
+}
+
+int main()
+{
+    	char str[] = "Hello, world! This is a test.";
+    	const char delim[] = " ,.!"; // 定义分隔符，可以是空格、逗号、点和感叹号
+	char** seperated_str = seperate_string(str, delim);
+	for (int i = 0; seperated_str[i] != NULL; ++i)
+	{
+		printf("%s\n", seperated_str[i]);
+	}
+	free(seperated_str);
+	return 0;
+}

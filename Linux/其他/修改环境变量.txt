@@ -1,0 +1,9 @@
+永久全局修改
+
+全局变量位于/etc/profile文件
+打开/etc/profile文件
+在文件末尾添加以下内容(例如添加/usr/sbin)：
+export PATH=$PATH:/usr/sbin
+保存并退出
+执行source /etc/profile应用更改
+执行echo $PATH验证 $PATH 是否更新

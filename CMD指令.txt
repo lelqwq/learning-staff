@@ -1,0 +1,5 @@
+查看最大支持多少内存内存
+wmic memphysical get maxcapacity
+
+查看当前内存信息
+wmic memorychip

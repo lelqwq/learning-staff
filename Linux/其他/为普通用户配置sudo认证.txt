@@ -1,0 +1,11 @@
+
+方法一  配置文件：
+切换到root用户
+执行visudo, 会自动通过vi打开/etc/sudoers
+在文件最后添加：用户名 ALL=(ALL) NOPASSWD:ALL
+保存退出
+
+
+方法二  将用户添加到sudo组中:
+切换到root用户
+执行usermod -aG sudo <用户名>

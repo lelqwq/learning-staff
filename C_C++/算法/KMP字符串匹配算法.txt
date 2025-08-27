@@ -1,0 +1,82 @@
+#include <stdlib.h>中有strstr(char *str, char *substr)。如果找到substr，返回指向str中第一次出现substr的指针，如果未找到substr，返回NULL。例子如下：
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	char str[] = "abcdefghijk";
+	char substr[] = "efg";
+	printf("%s", strstr(str, substr));//输出efghijk
+	return 0;
+}
+
+
+
+vector<int>buildNext(string needle)  // 计算next数组	第一种方法，时间复杂度O(n²)
+{
+    vector<int>next;
+    next.push_back(-1);//第一个是-1
+    for (int i = 1; i < needle.size(); i++)
+    {
+        int max = 0;
+        for (int j = 0; j < i; j++)
+        {
+            if (needle.substr(0, j + 1) == needle.substr(i - j, j + 1))
+            {
+                max = j + 1;
+            }
+        }
+        next.push_back(max);
+    }
+    return next;
+}
+
+vector<int>buildNext(string needle) // 计算next数组	第二种方法，时间复杂度O(n)
+{ 
+    int n_length = needle.length();
+    int j = 0; // “主”串指针
+    vector<int> next(n_length); // next 表
+    int t = next[0] = -1; // 模式串指针
+    while (j < n_length - 1)
+    {
+        if (t < 0 || needle[j] == needle[t])// 匹配
+        { 
+            j++; t++;
+            next[j] = t; 
+        }
+        else// 失配
+        {
+            t = next[t];
+        }
+    }   
+    return next;
+}
+
+int strStr(string haystack, string needle) //返回匹配到第一个字符串的开头下标，如果没有匹配到返回-1
+{
+    int h_length = haystack.length();
+    int n_length = needle.length();
+    vector<int>next = buildNext(needle);
+    int i = 0, j = 0;//i作为主串下标，j作为子串下标
+    while (i < h_length && j < n_length)
+    {
+        if (j < 0 || haystack[i] == needle[j])
+        {
+            i++;
+            j++;
+        }
+        else
+        {
+            j = next[j];
+        }
+    }
+    if (j  == n_length)
+    {
+        return i - j;
+    }
+    else
+    {
+        return -1;
+    }
+}
